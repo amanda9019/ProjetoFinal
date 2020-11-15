@@ -74,6 +74,11 @@ elif(opcao == 'Sistemas Lineares'):
 
     elif(metodo_linear == 'Gauss-Seidel (iterativo)'):
         st.title('Sistema Linear Iterativo - Gauss-Seidel')
+        name_dict = {"Anord":"", "Bernald":""}
+
+        for k, v in name_dict.items():
+            name_dict[k] = st.text_input(k, v)
+            st.write(name_dict[k])
 
 
 elif(opcao == 'Interpolação Polinomial'):
@@ -83,6 +88,23 @@ elif(opcao == 'Interpolação Polinomial'):
 
     if(metodo_interpol == 'Lagrange'):
         st.title('Interpolação Polinomial - Lagrange')
+        # Pegar e converter as coordenadas em uma lista 2d
+        pontos = st.sidebar.text_input("Conjunto de dados (Formato: x0 y0;x1 y1;x2 y2):")    #"-1 4;0 1;2 -1"
+        pontos = pontos.split(";")                  #['-1 4', '0 1', '2 -1']
+        pontos = [i.split(" ") for i in pontos]     #[['-1', '4'], ['0', '1'], ['2', '-1']]
+        dados = [list(map(int,i)) for i in pontos] #[[-1, 4], [0, 1], [2, -1]]
+        
+        x = st.sidebar.text_input("Valor de x:")    #"1,5"
+        x = x.replace(",", ".")     #"1,5" -> "1.5"
+
+        if pontos is not None:
+            st.write(f"Dados = {dados}")
+            st.write(f"x = {x}")
+
+            formula_l = '(({x}-{x1})*({x}-{x2})) / (({x0}-{x1})*({x0}-{x2}))'.format(x=x, x0=dados[0][0], x1=dados[1][0], x2=dados[2][0])
+
+            formula = 'L0*{y0} + L1*{y1} + L2*{y2}'.format(y0=dados[0][1], y1=dados[1][1], y2=dados[2][1])
+            p = lambda x: eval(formula)
 
     elif(metodo_interpol == 'Newton'):
         st.title('Interpolação Polinomial - Newton')
